@@ -43,7 +43,7 @@ const userLogin = async(req, res) => {
       }
       res.status(200).json({success:true, user})
     }
-    catch(err){
+    catch(err){ 
       res.status(400).json({success:false, message: "cannot retrieve user", errorMessage: err.message})
     }
 }

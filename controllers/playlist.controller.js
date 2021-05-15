@@ -34,14 +34,14 @@ const createNewPlaylist = async (req, res) => {
 const toggleVideoInPlaylist = async (req, res) => {
     try {
         const {playlistName} = req.body;
-        const {addVideo} = req.body;
+        const {video} = req.body;
         let userPlaylist = req.userPlaylist;
         let selectedPlaylist =  userPlaylist.playlists.find(({name}) => name === playlistName);
-        const isVideoPresent = selectedPlaylist.videos.find( videoId => videoId.toString() === addVideo );
+        const isVideoPresent = selectedPlaylist.videos.find( videoId => videoId.toString() === video );
         if(isVideoPresent){
-            selectedPlaylist.videos = selectedPlaylist.videos.filter(videoId => videoId.toString() !== addVideo )
+            selectedPlaylist.videos = selectedPlaylist.videos.filter(videoId => videoId.toString() !== video )
         }else{
-            selectedPlaylist.videos.push(addVideo)
+            selectedPlaylist.videos.push(video)
         }
         await userPlaylist.save();
         userPlaylist = await userPlaylist.populate("playlists.videos").execPopulate();

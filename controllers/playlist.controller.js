@@ -28,7 +28,7 @@ const createNewPlaylist = async (req, res) => {
     const addNewPlaylist = {name: newPlaylist, videos: [] }
     userPlaylist.playlists.push(addNewPlaylist)
     await userPlaylist.save()
-    res.status(200).json({success: true, playlists: userPlaylist.playlists})
+    res.status(200).json({success: true, playlist: addNewPlaylist})
 }
 
 const toggleVideoInPlaylist = async (req, res) => {
@@ -45,7 +45,7 @@ const toggleVideoInPlaylist = async (req, res) => {
         }
         await userPlaylist.save();
         userPlaylist = await userPlaylist.populate("playlists.videos").execPopulate();
-        res.status(200).json({success: true, playlists: selectedPlaylist})
+        res.status(200).json({success: true, playlist: selectedPlaylist})
 
     } catch (error) {
         res.status(400).json({success:false, message: "could not retreive user playlist", errorMessage: error.message});

@@ -10,7 +10,8 @@ const PlaylistSchema = new mongoose.Schema({
     playlists: [{
         name: {
             type: String,
-            required: "Please provide the playlist name"
+            required: "Please provide the playlist name",
+            unique: true
         },
 
         videos: [{

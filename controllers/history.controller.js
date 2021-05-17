@@ -18,7 +18,7 @@ const checkUserHistory = async (req, res, next, userId) => {
 const getUserHistory = async(req, res) => {
     let {userHistory} = req;
     userHistory = await userHistory.populate('videos').execPopulate();
-    res.status(200).json({success: true, likedVideos: userHistory})
+    res.status(200).json({success: true, history: userHistory.videos})
 }
 
 const addVideoToHistory = async(req, res) => {
@@ -34,12 +34,19 @@ const addVideoToHistory = async(req, res) => {
         }
         await userHistory.save();
         userHistory = await userHistory.populate('videos').execPopulate();
-        userHistory.videos = [userHistory.videos].reverse();
-        res.status(200).json({success: true, userHistory})
+        res.status(200).json({success: true, history: userHistory.videos})
 
     } catch (error) {
         res.status(400).json({success:false, message: "could not update user history", errorMessage: error.message});
     }
+}
+
+const removeVideoFromHistory = async (req, res) => {
+    let {video} = req.body;
+    let {userHistory} = req;
+    userHistory.videos = userHistory.videos.filter(videoId => videoId.toString() !== video )
+    await userHistory.save();
+    res.status(200).json({success: true, history: userHistory.videos})
 }
 
 const clearUserHistory = async (req, res) => {
@@ -49,4 +56,4 @@ const clearUserHistory = async (req, res) => {
     res.status(200).json({success: true, userHistory})
 }
 
-module.exports = {checkUserHistory, getUserHistory, addVideoToHistory, clearUserHistory}
+module.exports = {checkUserHistory, getUserHistory, addVideoToHistory, removeVideoFromHistory, clearUserHistory}

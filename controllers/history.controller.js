@@ -11,7 +11,7 @@ const checkUserHistory = async (req, res, next, userId) => {
         next();
 
     } catch (error) {
-        res.status(400).json({success:false, message: "could not retreive user history", errorMessage: error.message});
+        res.status(500).json({success:false, message: "could not retreive user history", errorMessage: error.message});
     }
 }
 
@@ -37,7 +37,7 @@ const addVideoToHistory = async(req, res) => {
         res.status(200).json({success: true, history: userHistory.videos})
 
     } catch (error) {
-        res.status(400).json({success:false, message: "could not update user history", errorMessage: error.message});
+        res.status(500).json({success:false, message: "could not update user history", errorMessage: error.message});
     }
 }
 
@@ -53,7 +53,7 @@ const clearUserHistory = async (req, res) => {
     let {userHistory} = req;
     userHistory.videos = [];
     await userHistory.save();
-    res.status(200).json({success: true, userHistory})
+    res.status(200).json({success: true})
 }
 
 module.exports = {checkUserHistory, getUserHistory, addVideoToHistory, removeVideoFromHistory, clearUserHistory}

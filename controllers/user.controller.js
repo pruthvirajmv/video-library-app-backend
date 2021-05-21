@@ -28,7 +28,7 @@ const addNewUser = async(req, res) =>{
       res.status(200).json({success: true, addedUser});
     }
     catch(err){
-      res.status(400).json({success:false, message: "could not add user", errorMessage: err.message});
+      res.status(500).json({success:false, message: "could not add user", errorMessage: err.message});
     }
 }
 
@@ -44,7 +44,7 @@ const userLogin = async(req, res) => {
       res.status(200).json({success:true, user})
     }
     catch(err){ 
-      res.status(400).json({success:false, message: "cannot retrieve user", errorMessage: err.message})
+      res.status(500).json({success:false, message: "cannot retrieve user", errorMessage: err.message})
     }
 }
 
@@ -62,7 +62,7 @@ const userResetPassword = async(req, res) => {
       res.status(200).json({success:true, user})
     }
     catch(err){
-      res.status(400).json({success:false, message: "cannot retrieve user", errorMessage: err.message})
+      res.status(500).json({success:false, message: "cannot retrieve user", errorMessage: err.message})
     }
 }
 
@@ -77,14 +77,14 @@ const checkUserId = async (req, res , next, userId) => {
         next();        
     }
     catch(err){
-        return res.status(400).json({success: false, message: "failed to retrive user"})
+        return res.status(500).json({success: false, message: "failed to retrive user"})
     }
 }
 
 const getUserProfile = (req, res) => {
     const { user } = req
     user.__v = undefined;
-    res.json({ success: true, user })
+    res.status(200).json({ success: true, user })
 }
 
 

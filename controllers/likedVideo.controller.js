@@ -11,7 +11,7 @@ const checkUserLikedVideos = async (req, res, next, userId) => {
         next();
 
     } catch (error) {
-        res.status(400).json({success:false, message: "could not retreive user Liked Videos", errorMessage: error.message});
+        res.status(500).json({success:false, message: "could not retreive user Liked Videos", errorMessage: error.message});
     }
 } 
 
@@ -36,7 +36,7 @@ const toggleLikedVideo = async(req, res) => {
         res.status(200).json({success: true, likedVideos: userLikedVideos.videos})
 
     } catch (error) {
-        res.status(400).json({success:false, message: "could not update user liked videos", errorMessage: error.message});
+        res.status(500).json({success:false, message: "could not update user liked videos", errorMessage: error.message});
     }
 }
 

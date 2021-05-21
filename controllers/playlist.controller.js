@@ -12,7 +12,7 @@ const checkUserPlaylist = async (req, res, next, userId) => {
         next();
 
     } catch (error) {
-        res.status(400).json({success:false, message: "could not retreive user playlist", errorMessage: error.message});
+        res.status(500).json({success:false, message: "could not retreive user playlist", errorMessage: error.message});
     }
 }
 
@@ -23,7 +23,7 @@ const getUserPlaylist = async (req, res) => {
         res.status(200).json({success: true, playlists: userPlaylist.playlists})
     }
     catch(error){
-        res.status(505).json({success:false, message: "something went wrong", errorMessage: error.message});
+        res.status(500).json({success:false, message: "something went wrong", errorMessage: error.message});
     }
 }
 
@@ -36,7 +36,7 @@ const createNewPlaylist = async (req, res) => {
         await userPlaylist.save()
         res.status(200).json({success: true, playlist: addNewPlaylist})
     }catch(error){
-        res.status(505).json({success:false, message: "something went wrong", errorMessage: error.message});
+        res.status(500).json({success:false, message: "something went wrong", errorMessage: error.message});
     }
 }
 
@@ -57,7 +57,7 @@ const toggleVideoInPlaylist = async (req, res) => {
         res.status(200).json({success: true, playlist: selectedPlaylist})
 
     } catch (error) {
-        res.status(400).json({success:false, message: "could not retreive user playlist", errorMessage: error.message});
+        res.status(500).json({success:false, message: "could not retreive user playlist", errorMessage: error.message});
     }
 }
 
@@ -72,7 +72,7 @@ const editPlaylistName = async (req, res) => {
         res.status(200).json({success: true, selectedPlaylist})
 
     } catch (error) {
-        res.status(400).json({success:false, message: "could not retreive user playlist", errorMessage: error.message});
+        res.status(500).json({success:false, message: "could not retreive user playlist", errorMessage: error.message});
     }
 }
 
@@ -85,7 +85,7 @@ const removePlaylist = async (req, res) => {
         res.status(200).json({success: true, userPlaylist})
 
     } catch (error) {
-        res.status(400).json({success:false, message: "could not retreive user playlist", errorMessage: error.message});
+        res.status(500).json({success:false, message: "could not retreive user playlist", errorMessage: error.message});
     }
 }
 

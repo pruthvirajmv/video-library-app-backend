@@ -17,18 +17,27 @@ const checkUserPlaylist = async (req, res, next, userId) => {
 }
 
 const getUserPlaylist = async (req, res) => {
-    let userPlaylist = req.userPlaylist;
-    userPlaylist = await userPlaylist.populate("playlists.videos").execPopulate();
-    res.status(200).json({success: true, playlists: userPlaylist.playlists})
+    try{
+        let userPlaylist = req.userPlaylist;
+        userPlaylist = await userPlaylist.populate("playlists.videos").execPopulate();
+        res.status(200).json({success: true, playlists: userPlaylist.playlists})
+    }
+    catch(error){
+        res.status(505).json({success:false, message: "something went wrong", errorMessage: error.message});
+    }
 }
 
 const createNewPlaylist = async (req, res) => {
-    const {newPlaylist} = req.body;
-    const userPlaylist = req.userPlaylist;
-    const addNewPlaylist = {name: newPlaylist, videos: [] }
-    userPlaylist.playlists.push(addNewPlaylist)
-    await userPlaylist.save()
-    res.status(200).json({success: true, playlist: addNewPlaylist})
+    try{
+        const {newPlaylist} = req.body;
+        const userPlaylist = req.userPlaylist;
+        const addNewPlaylist = {name: newPlaylist, videos: [] }
+        userPlaylist.playlists.push(addNewPlaylist)
+        await userPlaylist.save()
+        res.status(200).json({success: true, playlist: addNewPlaylist})
+    }catch(error){
+        res.status(505).json({success:false, message: "something went wrong", errorMessage: error.message});
+    }
 }
 
 const toggleVideoInPlaylist = async (req, res) => {

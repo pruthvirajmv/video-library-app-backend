@@ -1,10 +1,14 @@
 const express = require('express');
-const { checkUserLikedVideos, getUserLikedVideos, toggleLikedVideo } = require('../controllers/likedVideo.controller');
+const {
+    checkAndGetUserLikedVideos,
+    getUserLikedVideos,
+    toggleLikedVideo,
+} = require('../controllers/likedVideo.controller');
 const router = express.Router();
 
-router.param("userId",checkUserLikedVideos)
+router.param('userId', checkAndGetUserLikedVideos);
 router.route('/:userId')
-.get(getUserLikedVideos)
-.post(toggleLikedVideo)
+    .get(getUserLikedVideos)
+    .post(toggleLikedVideo);
 
 module.exports = router;

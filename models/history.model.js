@@ -8,13 +8,13 @@ const HistorySchema = new mongoose.Schema({
     },
 
     videos: [{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Video'
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Video'
     }]
 
 })
 
-const History = new mongoose.model('History', HistorySchema);
+const History = mongoose.model('History', HistorySchema);
 
 module.exports = {
     History

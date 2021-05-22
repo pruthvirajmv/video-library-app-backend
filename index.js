@@ -1,7 +1,7 @@
-const express =  require('express');
+const express = require('express');
 require('body-parser')
 
-const erroHandler = require('./middlewares/error-handler.middleware');
+const errorHandler = require('./middlewares/error-handler.middleware');
 const routeNotFound = require('./middlewares/route-not-found-handler.middleware')
 
 const videos = require('./routers/videos.router');
@@ -35,7 +35,7 @@ app.use('/history', history)
 
 
 // must stay last
-app.use(erroHandler);
+app.use(errorHandler);
 app.use(routeNotFound);
 
 

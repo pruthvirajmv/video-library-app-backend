@@ -1,27 +1,27 @@
-const express =  require('express');
+const express = require('express');
 const router = express.Router();
 
-const { 
-    addNewUser, 
-    userLogin, 
+const {
+    addNewUser,
+    userLogin,
     userResetPassword,
-    checkUserId, 
-    getUserProfile, 
+    checkAndGetUser,
+    getUserProfile,
 } = require('../controllers/user.controller');
 
 
 router.route('/')
-.post(addNewUser)
+    .post(addNewUser)
 
 router.route('/login')
-.post(userLogin)
+    .post(userLogin)
 
-router.param('userId', checkUserId);
+router.param('userId', checkAndGetUser);
 
 router.route('/:userId')
-.get(getUserProfile)
+    .get(getUserProfile)
 
 router.route('/resetpassword')
-.post(userResetPassword)
+    .post(userResetPassword)
 
 module.exports = router;

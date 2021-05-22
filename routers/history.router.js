@@ -1,17 +1,23 @@
 const express = require('express');
-const { checkUserHistory, getUserHistory, addVideoToHistory, removeVideoFromHistory, clearUserHistory } = require('../controllers/history.controller');
+const {
+    checkAndGetUserHistory,
+    getUserHistory,
+    addVideoToHistory,
+    removeVideoFromHistory,
+    clearUserHistory
+} = require('../controllers/history.controller');
 const router = express.Router();
 
-router.param("userId",checkUserHistory)
+router.param("userId", checkAndGetUserHistory)
 
 router.route('/:userId')
-.get(getUserHistory)
-.post(addVideoToHistory)
+    .get(getUserHistory)
+    .post(addVideoToHistory)
 
 router.route('/:userId/remove')
-.post(removeVideoFromHistory)
+    .post(removeVideoFromHistory)
 
 router.route('/:userId/clear')
-.get(clearUserHistory)
+    .get(clearUserHistory)
 
 module.exports = router;

@@ -15,13 +15,13 @@ const PlaylistSchema = new mongoose.Schema({
         },
 
         videos: [{
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'Video'
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Video'
         }]
     }]
 })
 
-const Playlist = new mongoose.model('Playlist', PlaylistSchema);
+const Playlist = mongoose.model('Playlist', PlaylistSchema);
 
 module.exports = {
     Playlist

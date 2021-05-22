@@ -1,28 +1,26 @@
 const express = require('express');
-const { 
-    checkUserPlaylist,
-    getUserPlaylist,
-    createNewPlaylist,
-    toggleVideoInPlaylist,
-    editPlaylistName,
-    removePlaylist } = require('../controllers/playlist.controller');
+const {
+  checkAndGetUserPlaylist,
+  getUserPlaylist,
+  createNewPlaylist,
+  toggleVideoInPlaylist,
+  editPlaylistName,
+  removePlaylist,
+} = require('../controllers/playlist.controller');
 
 const router = express.Router();
 
-router.param('userId', checkUserPlaylist)
+router.param('userId', checkAndGetUserPlaylist);
 
 router.route('/:userId')
-.get(getUserPlaylist)
-.post(createNewPlaylist)
+  .get(getUserPlaylist).post(createNewPlaylist);
 
 router.route('/:userId/togglevideo')
-.post(toggleVideoInPlaylist)
+  .post(toggleVideoInPlaylist);
 
 router.route('/:userId/rename')
-.post(editPlaylistName)
+  .post(editPlaylistName);
 
-router.route('/:userId/remove')
-.post(removePlaylist)
-
+router.route('/:userId/remove').post(removePlaylist);
 
 module.exports = router;

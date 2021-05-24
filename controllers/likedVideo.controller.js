@@ -19,7 +19,7 @@ const checkAndGetUserLikedVideos = async (req, res, next, userId) => {
 const getUserLikedVideos = async (req, res) => {
   let { userLikedVideos } = req;
   userLikedVideos = await userLikedVideos.populate("videos").execPopulate();
-  res.status(200).json({ success: true, likedVideo: userLikedVideos.videos });
+  res.status(200).json({ success: true, likedVideos: userLikedVideos.videos });
 };
 
 const toggleLikedVideo = async (req, res) => {
@@ -34,7 +34,7 @@ const toggleLikedVideo = async (req, res) => {
     }
     await userLikedVideos.save();
     userLikedVideos = await userLikedVideos.populate("videos").execPopulate();
-    res.status(200).json({ success: true, likedVideo: userLikedVideos.videos });
+    res.status(200).json({ success: true, likedVideos: userLikedVideos.videos });
   } catch (error) {
     res
       .status(500)

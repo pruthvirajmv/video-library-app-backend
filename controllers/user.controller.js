@@ -1,9 +1,9 @@
-const { Playlist } = require('../models/playlist.model');
-const { User } = require('../models/user.model');
-const { LikedVideo } = require('../models/likedVideo.model');
-const { History } = require('../models/history.model');
+const { Playlist } = require("../models/playlist.model");
+const { User } = require("../models/user.model");
+const { LikedVideo } = require("../models/likedVideo.model");
+const { History } = require("../models/history.model");
 
-const { extend } = require('lodash');
+const { extend } = require("lodash");
 
 const addNewUser = async (req, res) => {
   try {
@@ -13,11 +13,11 @@ const addNewUser = async (req, res) => {
     const NewUser = new User(user);
     const addedUser = await NewUser.save();
 
-    const userPlaylist = new Playlist({ userId: addedUser._id, playlists: { name: 'Watch Later', videos: [] } });
-    userPlaylist.save();
+    const userPlaylist = new Playlist({ userId: addedUser._id, playlists: { name: "Watch Later", videos: [] } });
+    await userPlaylist.save();
 
     const userLikedVideos = new LikedVideo({ userId: addedUser._id });
-    userLikedVideos.save();
+    await userLikedVideos.save();
 
     const userHistory = new History({ userId: addedUser._id });
     userHistory.save();
@@ -27,7 +27,7 @@ const addNewUser = async (req, res) => {
 
     res.status(200).json({ success: true, addedUser });
   } catch (err) {
-    res.status(500).json({ success: false, message: 'could not add user', errorMessage: err.message });
+    res.status(500).json({ success: false, message: "could not add user", errorMessage: err.message });
   }
 };
 
@@ -38,11 +38,11 @@ const userLogin = async (req, res) => {
     let user = await User.findOne({ userName: username });
 
     if (!user || user.password !== password) {
-      return res.status(403).json({ success: true, message: 'username and password did not match' });
+      return res.status(403).json({ success: true, message: "username and password did not match" });
     }
     res.status(200).json({ success: true, user });
   } catch (err) {
-    res.status(500).json({ success: false, message: 'cannot retrieve user', errorMessage: err.message });
+    res.status(500).json({ success: false, message: "cannot retrieve user", errorMessage: err.message });
   }
 };
 
@@ -53,13 +53,13 @@ const userResetPassword = async (req, res) => {
     let user = await User.findOne({ email: email });
 
     if (!user) {
-      return res.status(404).json({ success: true, message: 'user does not exist' });
+      return res.status(404).json({ success: true, message: "user does not exist" });
     }
     user = extend(user, updateUserPassword);
     await user.save();
     res.status(200).json({ success: true, user });
   } catch (err) {
-    res.status(500).json({ success: false, message: 'cannot retrieve user', errorMessage: err.message });
+    res.status(500).json({ success: false, message: "cannot retrieve user", errorMessage: err.message });
   }
 };
 
@@ -67,13 +67,13 @@ const checkAndGetUser = async (req, res, next, userId) => {
   try {
     const user = await User.findById({ _id: userId });
     if (!user) {
-      return res.status(404).json({ success: false, message: 'error user not found' });
+      return res.status(404).json({ success: false, message: "error user not found" });
     }
 
     req.user = user;
     next();
   } catch (err) {
-    return res.status(500).json({ success: false, message: 'failed to retrive user' });
+    return res.status(500).json({ success: false, message: "failed to retrive user" });
   }
 };
 

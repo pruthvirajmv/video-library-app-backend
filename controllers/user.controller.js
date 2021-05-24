@@ -14,10 +14,10 @@ const addNewUser = async (req, res) => {
     const addedUser = await NewUser.save();
 
     const userPlaylist = new Playlist({ userId: addedUser._id, playlists: { name: "Watch Later", videos: [] } });
-    await userPlaylist.save();
+    userPlaylist.save();
 
     const userLikedVideos = new LikedVideo({ userId: addedUser._id });
-    await userLikedVideos.save();
+    userLikedVideos.save();
 
     const userHistory = new History({ userId: addedUser._id });
     userHistory.save();

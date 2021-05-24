@@ -1,10 +1,10 @@
-const { LikedVideos } = require('../models/likedVideo.model');
+const { LikedVideo } = require("../models/likedVideo.model");
 
 const checkAndGetUserLikedVideos = async (req, res, next, userId) => {
   try {
-    const userLikedVideos = await LikedVideos.findOne({ userId: userId });
+    const userLikedVideos = await LikedVideo.findOne({ userId: userId });
     if (!userLikedVideos) {
-      return res.status(404).json({ success: false, message: 'user does not exists' });
+      return res.status(404).json({ success: false, message: "user does not exists" });
     }
 
     req.userLikedVideos = userLikedVideos;
@@ -12,14 +12,14 @@ const checkAndGetUserLikedVideos = async (req, res, next, userId) => {
   } catch (error) {
     res
       .status(500)
-      .json({ success: false, message: 'could not retreive user Liked Videos', errorMessage: error.message });
+      .json({ success: false, message: "could not retreive user Liked Videos", errorMessage: error.message });
   }
 };
 
 const getUserLikedVideos = async (req, res) => {
   let { userLikedVideos } = req;
-  userLikedVideos = await userLikedVideos.populate('videos').execPopulate();
-  res.status(200).json({ success: true, likedVideos: userLikedVideos.videos });
+  userLikedVideos = await userLikedVideos.populate("videos").execPopulate();
+  res.status(200).json({ success: true, likedVideo: userLikedVideos.videos });
 };
 
 const toggleLikedVideo = async (req, res) => {
@@ -33,12 +33,12 @@ const toggleLikedVideo = async (req, res) => {
       userLikedVideos.videos.push(video);
     }
     await userLikedVideos.save();
-    userLikedVideos = await userLikedVideos.populate('videos').execPopulate();
-    res.status(200).json({ success: true, likedVideos: userLikedVideos.videos });
+    userLikedVideos = await userLikedVideos.populate("videos").execPopulate();
+    res.status(200).json({ success: true, likedVideo: userLikedVideos.videos });
   } catch (error) {
     res
       .status(500)
-      .json({ success: false, message: 'could not update user liked videos', errorMessage: error.message });
+      .json({ success: false, message: "could not update user liked videos", errorMessage: error.message });
   }
 };
 

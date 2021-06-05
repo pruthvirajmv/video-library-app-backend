@@ -1,27 +1,24 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
 const {
-    addNewUser,
-    userLogin,
-    userResetPassword,
-    checkAndGetUser,
-    getUserProfile,
-} = require('../controllers/user.controller');
+   addNewUser,
+   loginUser,
+   resetOrUpdateUserPassword,
+   getUserProfile,
+} = require("../controllers/user.controller");
 
+const { authentication } = require("../middlewares/authentication.middleware");
 
-router.route('/')
-    .post(addNewUser)
+router
+   .route("/")
+   .get(authentication, getUserProfile)
+   .post(authentication, resetOrUpdateUserPassword);
 
-router.route('/login')
-    .post(userLogin)
+router.route("/register").post(addNewUser);
 
-router.param('userId', checkAndGetUser);
+router.route("/login").post(loginUser);
 
-router.route('/:userId')
-    .get(getUserProfile)
-
-router.route('/resetpassword')
-    .post(userResetPassword)
+router.route("/resetpassword").post(resetOrUpdateUserPassword);
 
 module.exports = router;

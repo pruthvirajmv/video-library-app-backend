@@ -37,6 +37,23 @@ const addNewUser = async (req, res) => {
 
       res.status(200).json({ success: true, message: "user added", NewUser });
    } catch (err) {
+      console.log(err);
+      if (err.name === "MongoError" && err.code === 11000) {
+         console.log(err.keyPattern.userName, err.keyPattern.email);
+         if (err.keyPattern.userName) {
+            return res.status(422).json({
+               success: false,
+               message: "user name is already taken",
+               errorMessage: err.message,
+            });
+         } else if (err.keyPattern.email) {
+            return res.status(422).json({
+               success: false,
+               message: "account already exists with this email",
+               errorMessage: err.message,
+            });
+         }
+      }
       res.status(500).json({
          success: false,
          message: "could not add user",

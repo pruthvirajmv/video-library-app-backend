@@ -3,7 +3,8 @@ const { User } = require("../models/user.model");
 const { LikedVideo } = require("../models/likedVideo.model");
 const { History } = require("../models/history.model");
 
-var jwt = require("jsonwebtokens");
+var jwt = require("jsonwebtoken");
+require("dotenv").config();
 const JWT_KEY = process.env.JWT_KEY;
 var bcrypt = require("bcrypt");
 
@@ -17,7 +18,7 @@ const addNewUser = async (req, res) => {
       const NewUser = new User(user);
       const salt = await bcrypt.genSalt(10);
       NewUser.password = await bcrypt.hash(NewUser.password, salt);
-      NewUser = await NewUser.save();
+      await NewUser.save();
 
       const userPlaylist = new Playlist({
          userId: NewUser._id,
@@ -53,10 +54,10 @@ const loginUser = async (req, res) => {
       if (user) {
          const verifyPassword = await bcrypt.compare(password, user.password);
          if (verifyPassword) {
-            const token = jwt.sign({ userId: user.__id }, JWT_KEY, { expiresIn: "24h" });
+            const token = jwt.sign({ userId: user._id }, JWT_KEY, { expiresIn: "24h" });
             user.__v = undefined;
             user.password = undefined;
-            res.status(200).json({ success: true, message: "user logged in", user, token });
+            return res.status(200).json({ success: true, message: "user logged in", user, token });
          }
          return res
             .status(403)
@@ -101,4 +102,29 @@ const getUserProfile = (req, res) => {
    res.status(200).json({ success: true, user });
 };
 
-module.exports = { addNewUser, loginUser, resetOrUpdateUserPassword, getUserProfile };
+const updateUserProfile = async (req, res) => {
+   try {
+      let { user } = req;
+      const { password } = req.body;
+      const updateUserPassword = { password: password };
+      user = extend(user, updateUserPassword);
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(user.password, salt);
+      user = await user.save();
+      res.status(200).json({ success: true, message: "user credentials updated", user });
+   } catch (err) {
+      res.status(500).json({
+         success: false,
+         message: "cannot retrieve user",
+         errorMessage: err.message,
+      });
+   }
+};
+
+module.exports = {
+   addNewUser,
+   loginUser,
+   resetOrUpdateUserPassword,
+   getUserProfile,
+   updateUserProfile,
+};

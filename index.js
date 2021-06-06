@@ -3,6 +3,7 @@ require("body-parser");
 
 const errorHandler = require("./middlewares/error-handler.middleware");
 const routeNotFound = require("./middlewares/route-not-found-handler.middleware");
+const { authentication } = require("./middlewares/authentication.middleware");
 
 const videos = require("./routers/video.router");
 const user = require("./routers/user.route");
@@ -17,7 +18,6 @@ const cors = require("cors");
 app.use(cors());
 
 const dbConnect = require("./db/db.connect");
-const { authentication } = require("./middlewares/authentication.middleware");
 dbConnect();
 
 app.get("/", (req, res) => {
@@ -25,9 +25,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/videos", videos);
+app.use("/user", user);
 
 app.use(authentication);
-app.use("/user", user);
 app.use("/playlists", playlists);
 app.use("/likedvideos", likedVideos);
 app.use("/history", history);

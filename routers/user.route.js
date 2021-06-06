@@ -6,14 +6,12 @@ const {
    loginUser,
    resetOrUpdateUserPassword,
    getUserProfile,
+   updateUserProfile,
 } = require("../controllers/user.controller");
 
 const { authentication } = require("../middlewares/authentication.middleware");
 
-router
-   .route("/")
-   .get(authentication, getUserProfile)
-   .post(authentication, resetOrUpdateUserPassword);
+router.route("/").get(authentication, getUserProfile).post(authentication, updateUserProfile);
 
 router.route("/register").post(addNewUser);
 

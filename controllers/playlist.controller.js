@@ -35,12 +35,13 @@ const getUserPlaylist = async (req, res) => {
 
 const createNewPlaylist = async (req, res) => {
    try {
-      const { playlistName } = req.body;
+      const { playlistName, videoId } = req.body;
       const userPlaylist = req.userPlaylist;
-      const addNewPlaylist = { name: playlistName, videos: [] };
+      const addNewPlaylist = { name: playlistName, videos: [videoId] };
       userPlaylist.playlists.push(addNewPlaylist);
       await userPlaylist.save();
-      res.status(200).json({ success: true, playlist: addNewPlaylist });
+      await userPlaylist.populate("playlists.videos").execPopulate();
+      res.status(200).json({ success: true, playlist: userPlaylist });
    } catch (error) {
       res.status(500).json({
          success: false,

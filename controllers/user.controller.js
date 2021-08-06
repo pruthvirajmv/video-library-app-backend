@@ -15,27 +15,27 @@ const addNewUser = async (req, res) => {
       const { username, email, password } = req.body;
 
       const user = { userName: username, email: email, password: password };
-      const NewUser = new User(user);
+      const newUser = new User(user);
       const salt = await bcrypt.genSalt(10);
-      NewUser.password = await bcrypt.hash(NewUser.password, salt);
-      await NewUser.save();
+      newUser.password = await bcrypt.hash(newUser.password, salt);
+      await newUser.save();
 
       const userPlaylist = new Playlist({
-         userId: NewUser._id,
+         userId: newUser._id,
          playlists: { name: "Watch Later", videos: [] },
       });
       userPlaylist.save();
 
-      const userLikedVideos = new LikedVideo({ userId: NewUser._id });
+      const userLikedVideos = new LikedVideo({ userId: newUser._id });
       userLikedVideos.save();
 
-      const userHistory = new History({ userId: NewUser._id });
+      const userHistory = new History({ userId: newUser._id });
       userHistory.save();
 
-      NewUser.__v = undefined;
-      NewUser.password = undefined;
+      newUser.__v = undefined;
+      newUser.password = undefined;
 
-      res.status(200).json({ success: true, message: "user added", NewUser });
+      res.status(200).json({ success: true, message: "user added", newUser });
    } catch (err) {
       console.log(err);
       if (err.name === "MongoError" && err.code === 11000) {
@@ -64,9 +64,8 @@ const addNewUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
    try {
-      const { username, password } = req.body;
-
-      let user = await User.findOne({ userName: username });
+      const { email, password } = req.body;
+      let user = await User.findOne({ email: email });
 
       if (user) {
          const verifyPassword = await bcrypt.compare(password, user.password);
@@ -80,7 +79,7 @@ const loginUser = async (req, res) => {
             .status(403)
             .json({ success: false, message: "username and password did not match" });
       }
-      res.status(200).json({ success: false, message: "user does not exist " });
+      res.status(400).json({ success: false, message: "user does not exist " });
    } catch (err) {
       res.status(500).json({
          success: false,
